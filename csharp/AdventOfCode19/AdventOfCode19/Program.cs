@@ -10,8 +10,12 @@ namespace AdventOfCode19
     {
         static void Main(string[] args)
         {
-            Console.Write("Yay! Advent of code in C#!");
+            Console.WriteLine("Yay! Advent of code in C#!");
+            
+            Console.WriteLine($"Day 1.1 Result: {Day1.PartOne()}");
+            Console.WriteLine($"Day 1.2 Result: {Day1.PartTwo()}");
+
             Console.ReadLine();
-        }
+        }        
     }
 }
