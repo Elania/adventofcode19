@@ -1,9 +1,6 @@
 use std::fs::File;
 use std::io::Read;
 
-fn main() { 
-}
-
 pub fn part_one() -> i32{
   let filename = "../data/1.txt";
   let masses = parse_data(filename);
