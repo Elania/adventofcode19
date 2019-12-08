@@ -33,7 +33,6 @@ namespace AdventOfCode19
                 if (DoIncrease(digits) && HasPair(digits))
                 {
                     total++;
-                    Console.WriteLine(i);
                 }
 
             }
