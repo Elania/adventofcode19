@@ -15,6 +15,9 @@ namespace AdventOfCode19
             Console.WriteLine($"Day 8.1 Result: {Day8.PartOne()}");
             Console.WriteLine($"Day 8.2 Result: {Day8.PartTwo()}");
 
+            Console.WriteLine($"Day 7.1 Result: {Day7.PartOne()}");
+            Console.WriteLine($"Day 7.2 Result: {Day7.PartTwo()}");
+
             Console.WriteLine($"Day 6.1 Result: {Day6.PartOne()}");
             Console.WriteLine($"Day 6.2 Result: {Day6.PartTwo()}");
 

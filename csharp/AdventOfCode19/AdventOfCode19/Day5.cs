@@ -50,10 +50,10 @@ namespace AdventOfCode19
             return lastOutput;
         }
 
-        public static int PartTwo()
+        public static int PartTwo(int input = 5, string inputPath = @"..\..\..\..\..\data\5.txt", int secondInput = 0)
         {
-            var data = ParseData();
-            data[data[1]] = 5;
+            var data = ParseData(inputPath);
+            data[data[1]] = input;
             int i = 2;
             int lastOutput = 0;
             while (i < data.Count() && data[i] != 99)
@@ -71,7 +71,7 @@ namespace AdventOfCode19
                 int mode2 = codes[3];
                 int value1 = mode1 == 0 ? data[data[i + 1]] : data[i + 1];
                 int value2 = 0;
-                if (opcode != 4)
+                if (opcode != 4 && opcode != 3)
                     value2 = mode2 == 0 ? data[data[i + 2]] : data[i + 2];
                 if (opcode == 1)
                 {
@@ -82,6 +82,11 @@ namespace AdventOfCode19
                 {
                     data[data[i + 3]] = value1 * value2;
                     i += 4;
+                }
+                else if (opcode == 3)
+                {
+                    data[data[i + 1]] = secondInput;
+                    i += 2;
                 }
                 else if (opcode == 4)
                 {
@@ -116,12 +121,12 @@ namespace AdventOfCode19
             return lastOutput;
         }
 
-        static List<int> ParseData()
+        static List<int> ParseData(string path = @"..\..\..\..\..\data\5.txt")
         {
             var result = new List<int>();
             try
             {
-                string[] lines = System.IO.File.ReadAllLines(@"..\..\..\..\..\data\5.txt");
+                string[] lines = System.IO.File.ReadAllLines(path);
                 if (lines.Length > 0)
                 {
                     string[] numbersAsStrings = lines[0].Split(',');
