@@ -40,28 +40,34 @@ namespace AdventOfCode19
             int highestVal2 = 0;
             foreach (var permutation in result2)
             {
-                //var testPermutation = new int[] { 9, 8, 7, 6, 5 };
+                var testPermutation = new int[] { 9, 8, 7, 6, 5 };
                 var programs = new IntCodeProgram[5];
+                var inputQueues = new Queue<int>[5];
                 for (int i = 0; i < programs.Length; i++)
                 {
-                    programs[i] = new IntCodeProgram(permutation[i], @"..\..\..\..\..\data\7.txt");
+                    programs[i] = new IntCodeProgram(@"..\..\..\..\..\data\7.txt");
+                    inputQueues[i] = new Queue<int>();
+                    inputQueues[i].Enqueue(permutation[i]);
+                    //inputQueues[i].Enqueue(testPermutation[i]);
+                    if (i == 0) inputQueues[i].Enqueue(0);
                     //programs[i] = new IntCodeProgram(testPermutation[i]);
                 }
                 int currentProgramIdx = 0;
                 bool isFinished = false;
-                int io = 0;
                 while (!isFinished)
                 {
-                    //Console.WriteLine($"program {currentProgramIdx} i {io}");
-                    io = programs[currentProgramIdx].Run(io);
-                    isFinished = programs[currentProgramIdx].Finished;
+                    
+                    int o = programs[currentProgramIdx].Run(inputQueues[currentProgramIdx]);
+                    //Console.WriteLine($"program {currentProgramIdx} o {o}");
+                    isFinished = currentProgramIdx == 4 && programs[currentProgramIdx].State == IntCodeProgramState.FINISHED;
                     //Console.WriteLine($"program {currentProgramIdx} o {io} isFinished {isFinished}");
-                    if (currentProgramIdx == 4 && io > highestVal2)
+                    if (currentProgramIdx == 4 && o > highestVal2)
                     {
-                        highestVal2 = io;
-                        permutation.CopyTo(bestPermutation, 0);
+                        highestVal2 = o;
+                        //permutation.CopyTo(bestPermutation, 0);
                     }
                     currentProgramIdx = (currentProgramIdx + 1) % programs.Length;
+                    inputQueues[currentProgramIdx].Enqueue(o);
                 }
 
                 
@@ -99,12 +105,19 @@ namespace AdventOfCode19
         }
     }
 
+    enum IntCodeProgramState
+    {
+        RUNNING,
+        PAUSED,
+        FINISHED
+    }
+
     class IntCodeProgram
     {
-        private int _phaseSetting;
         private List<int> _data;
         private int _output;
         private int _iteratorPos;
+        private IntCodeProgramState _state;
 
         public int Output
         {
@@ -119,31 +132,28 @@ namespace AdventOfCode19
             }
         }
 
-        public bool Finished
+        public IntCodeProgramState State
         {
             get
             {
-                return _data[_iteratorPos] == 99;
+                return _state;
             }
         }
-
-        public IntCodeProgram(int phaseSetting, string inputPath = @"..\..\..\..\..\data\7.txt")
+        public IntCodeProgram(string inputPath = @"..\..\..\..\..\data\7.txt")
         {
-            //_data = ParseData(inputPath);
-            _data = new List<int>()
-                        {
-                            3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,
-27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5
-                        };
-            _iteratorPos = 2;
-            _phaseSetting = phaseSetting;
-            _data[_data[1]] = _phaseSetting;
+            _data = ParseData(inputPath);
+//            _data = new List<int>()
+//                        {
+//                            3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,
+//27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5
+//                        };
+            _iteratorPos = 0;
         }
-        public int Run(int input = 0)
-        {            
-            bool halt = false;
-            bool inputConsumed = false;
-            while (_iteratorPos < _data.Count() && _data[_iteratorPos] != 99 && !halt)
+        public int Run(Queue<int> input)
+        {
+            _state = IntCodeProgramState.RUNNING;
+            Output = 0;
+            while (_iteratorPos < _data.Count() && _data[_iteratorPos] != 99 && _state == IntCodeProgramState.RUNNING)
             {
                 int[] codes = new int[] { 0, 0, 0, 0 };
                 int[] parsedCodes = NumToArray(_data[_iteratorPos]);
@@ -172,16 +182,20 @@ namespace AdventOfCode19
                 }
                 else if (opcode == 3)
                 {
-                    if (inputConsumed) Console.WriteLine("Next input without Output");
-                    _data[_data[_iteratorPos + 1]] = input;
-                    inputConsumed = true;
-                    _iteratorPos += 2;
+                    if (input.Count > 0)
+                    {
+                        int currentInput = input.Dequeue();
+                        int tmpPos = _data[_iteratorPos + 1];
+                        _data[tmpPos] = currentInput;
+                        _iteratorPos += 2;
+                    }
+                    else
+                        _state = IntCodeProgramState.PAUSED;
                 }
                 else if (opcode == 4)
                 {
                     Output = value1;
                     _iteratorPos += 2;
-                    halt = true;
                 }
                 else if (opcode == 5)
                 {
@@ -208,9 +222,9 @@ namespace AdventOfCode19
                     _iteratorPos += 4;
                 }
             }
-            if(!inputConsumed)
+            if(_data[_iteratorPos] == 99)
             {
-                Console.WriteLine("Output before next input");
+                _state = IntCodeProgramState.FINISHED;
             }
             return this.Output;
         }
