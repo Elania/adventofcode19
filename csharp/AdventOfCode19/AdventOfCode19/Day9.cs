@@ -165,7 +165,7 @@ namespace AdventOfCode19
                 else if (opcode == 4)
                 {
                     Output = value1;
-                    Console.WriteLine(value1);
+                    //Console.WriteLine(value1);
                     _iteratorPos += 2;
                 }
                 else if (opcode == 5)
