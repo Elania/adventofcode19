@@ -41,11 +41,11 @@ namespace AdventOfCode19
             foreach (var permutation in result2)
             {
                 var testPermutation = new int[] { 9, 8, 7, 6, 5 };
-                var programs = new IntCodeProgram[5];
+                var programs = new IntCodeProgram7[5];
                 var inputQueues = new Queue<int>[5];
                 for (int i = 0; i < programs.Length; i++)
                 {
-                    programs[i] = new IntCodeProgram(@"..\..\..\..\..\data\7.txt");
+                    programs[i] = new IntCodeProgram7(@"..\..\..\..\..\data\7.txt");
                     inputQueues[i] = new Queue<int>();
                     inputQueues[i].Enqueue(permutation[i]);
                     //inputQueues[i].Enqueue(testPermutation[i]);
@@ -112,7 +112,7 @@ namespace AdventOfCode19
         FINISHED
     }
 
-    class IntCodeProgram
+    class IntCodeProgram7
     {
         private List<int> _data;
         private int _output;
@@ -139,7 +139,7 @@ namespace AdventOfCode19
                 return _state;
             }
         }
-        public IntCodeProgram(string inputPath = @"..\..\..\..\..\data\7.txt")
+        public IntCodeProgram7(string inputPath = @"..\..\..\..\..\data\7.txt")
         {
             _data = ParseData(inputPath);
 //            _data = new List<int>()
