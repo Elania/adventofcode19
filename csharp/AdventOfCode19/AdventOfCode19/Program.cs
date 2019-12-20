@@ -12,8 +12,11 @@ namespace AdventOfCode19
         {
             Console.WriteLine("Yay! Advent of code in C#!");
 
-            Console.WriteLine($"Day 12.2 Result: {Day12.PartTwo()}");
-            Console.WriteLine($"Day 12.1 Result: {Day12.PartOne()}");
+            Console.WriteLine($"Day 13.2 Result: {Day13.PartTwo()}");
+            Console.WriteLine($"Day 13.1 Result: {Day13.PartOne()}");
+
+            //Console.WriteLine($"Day 12.2 Result: {Day12.PartTwo()}");
+            //Console.WriteLine($"Day 12.1 Result: {Day12.PartOne()}");
 
             //Console.WriteLine($"Day 11.2 Result: {Day11.PartTwo()}");
             //Console.WriteLine($"Day 11.1 Result: {Day11.PartOne()}");
